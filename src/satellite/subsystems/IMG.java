@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class IMG extends Component {
 
-    public IMG(String name, String satName, ArrayList<String> commands) {
-        super(name, satName, commands);
+    public IMG(String name, ArrayList<String> commands) {
+        super(name, commands);
     }
 
     public Data recoverData() {

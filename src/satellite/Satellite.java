@@ -12,8 +12,8 @@ public class Satellite {
     HashMap<String, Component> components;
 
     public Satellite(String name, Family f) {
-        this.name = name;
         this.familyName = f.getName().toUpperCase();
+        this.name = this.familyName + name;
         this.components = f.getComponents();
     }
 
@@ -73,7 +73,7 @@ public class Satellite {
     public ReturnedData executeTM(String comp) {
         if (this.checkComponentExists(comp) && this.getComponent(comp).getActivity()) {
             Data recoveredData = this.getComponent(comp).recoverData();
-            recoveredData.changeSat(this.getFullname());
+            recoveredData.changeSat(this.getName());
             return new ReturnedData(true, recoveredData);
         }
         return new ReturnedData(false, null);
@@ -104,15 +104,6 @@ public class Satellite {
      */
     public String getFamilyName() {
         return this.familyName;
-    }
-
-    /**
-     * Get the full name of the satellite (family name + usual name)
-     * 
-     * @return
-     */
-    public String getFullname() {
-        return this.familyName + this.name;
     }
 
     @Override

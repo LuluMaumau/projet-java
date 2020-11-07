@@ -15,7 +15,7 @@ public class Main {
         HashMap<String, Component> Components = new HashMap<String, Component>();
         ArrayList<String> commands = new ArrayList<String>();
 
-        IMG Imager = new IMG("IMAGER", "FAMLULU", commands);
+        IMG Imager = new IMG("IMAGER", commands);
         Components.put(Imager.getName(), Imager);
 
         BDD.makeFamily("FAM", Components);

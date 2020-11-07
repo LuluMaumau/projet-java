@@ -6,8 +6,10 @@ import dtype.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.FileNotFoundException;
+import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 
 import java.util.HashMap;
 import java.util.Date;
@@ -43,12 +45,23 @@ public class Database {
      * @throws FileNotFoundException
      */
     public void makeSatellite(String name, Family f) throws IOException {
+
         Satellite sat = new Satellite(name.toUpperCase(), f);
-        satList.put(sat.getFullname(), sat);
-        FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getFullname() + "/nextseqnum.txt");
-        ObjectOutputStream out = new ObjectOutputStream(newSatFile);
-        out.writeLong(000000000);
-        out.close();
+
+        File newFile = new File("data/" + sat.getName());
+        boolean madeNewFile = newFile.mkdir();
+        if (madeNewFile) {
+
+            satList.put(sat.getName(), sat);
+
+            System.out.println("data/" + sat.getName() + "/nextseqnum.bin");
+            FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getName() + "/nextseqnum.bin");
+            ObjectOutputStream out = new ObjectOutputStream(newSatFile);
+            out.writeLong(000000000);
+            out.close();
+        } else {
+            System.out.println("The new satellite file couldn't be created");
+        }
     }
 
     /**
@@ -71,11 +84,21 @@ public class Database {
      * @throws IOException
      */
     public void addData(Data data) throws IOException {
+        /** Checking the next sequence number */
         Satellite sat = satList.get(data.getSat());
-        FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getFullname() + "/nextseqnum.txt");
-        ObjectOutputStream out = new ObjectOutputStream(newSatFile);
-        out.writeLong(000000000);
-        out.close();
+        FileInputStream inSatFile = new FileInputStream("data/" + sat.getName() + "/nextseqnum.bin");
+        ObjectInputStream in = new ObjectInputStream(inSatFile);
+        long n = in.readLong();
+        in.close();
+
+        if (n == 99999999) {
+            System.out.println("Data folder for " + sat.getName() + " is full.");
+        } else {
+            FileOutputStream newDataFile = new FileOutputStream("data/" + sat.getName() + "/" + n + ".bin");
+            ObjectOutputStream out = new ObjectOutputStream(newDataFile);
+            out.writeObject(data);
+            out.close();
+        }
     }
 
     /**

@@ -7,19 +7,17 @@ import java.util.ArrayList;
 public abstract class Component {
 
     String name;
-    String satName;
     boolean active;
     ArrayList<String> commands;
 
-    public Component(String name, String satName, ArrayList<String> commands) {
+    public Component(String name, ArrayList<String> commands) {
         this.name = name.toUpperCase();
-        this.satName = satName;
         this.active = true;
         for (String string : commands) {
             string.toUpperCase();
         }
-        commands.add(0, "ACTIVATE");
-        commands.add(1, "DEACTIVATE");
+        commands.add(0, "ON");
+        commands.add(1, "OFF");
         this.commands = commands;
     }
 
@@ -62,10 +60,10 @@ public abstract class Component {
     public boolean run(String command) {
 
         switch (command) {
-            case ("ACTIVATE"): {
+            case ("ON"): {
                 return this.activate();
             }
-            case ("DEACTIVATE"): {
+            case ("OFF"): {
                 return this.deactivate();
             }
             default: {
@@ -103,15 +101,6 @@ public abstract class Component {
      */
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * Get the name of the Component
-     * 
-     * @return The name attribute
-     */
-    public String getSatName() {
-        return this.satName;
     }
 
     /**
