@@ -10,7 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Date;
 
@@ -28,12 +28,28 @@ public class Database {
      * For the measured data I use a HashMap index by the date of the measure, seen
      * as a double for the time being and it will be stocked as such :
      * YYYYMMDD.HHMMSS
+     * 
+     * @throws IOException
+     * @throws ClassNotFoundException
      */
 
-    public Database() {
-        this.satList = new HashMap<String, Satellite>();
-        this.famList = new HashMap<String, Family>();
-        this.dataHashMap = new HashMap<Date, Data>();
+    public Database() throws ClassNotFoundException, IOException {
+        /** Constructing the HashMaps */
+        satList = new HashMap<String, Satellite>();
+        famList = new HashMap<String, Family>();
+
+        /** Completing those with existing data in the database */
+        File[] FileList = (new File("data/")).listFiles();
+        for (File file : FileList) {
+            if (file.isDirectory()) {
+                String filePath = file.getCanonicalPath();
+                FileInputStream inSatFile = new FileInputStream(filePath + "/sat.bin");
+                ObjectInputStream inSat = new ObjectInputStream(inSatFile);
+                Satellite sat = (Satellite) inSat.readObject();
+                satList.put(sat.getName(), sat);
+                inSat.close();
+            }
+        }
     }
 
     /**
@@ -51,7 +67,8 @@ public class Database {
         if (!newFile.exists()) {
             boolean madeNewFile = newFile.mkdirs();
             if (!madeNewFile) {
-
+                throw new Error(
+                        "This satellite doesn't exist but couldn't make a new folder to store its informations");
             }
         } else {
             System.out.println("Similar satellite with the same name already exists");
@@ -60,11 +77,17 @@ public class Database {
         /** This is only here for tests, will change place soon */
         satList.put(sat.getName(), sat);
 
-        System.out.println("data/" + sat.getName() + "/nextseqnum.bin");
-        FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getName() + "/nextseqnum.bin");
-        ObjectOutputStream out = new ObjectOutputStream(newSatFile);
-        out.writeLong(000000000);
-        out.close();
+        /** Making the nextseqnum file */
+        FileOutputStream newSeqFile = new FileOutputStream("data/" + sat.getName() + "/nextseqnum.bin");
+        ObjectOutputStream outSeq = new ObjectOutputStream(newSeqFile);
+        outSeq.writeLong(000000000);
+        outSeq.close();
+
+        /** Making a file with the satelitte's informations */
+        FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getName() + "/sat.bin");
+        ObjectOutputStream outSat = new ObjectOutputStream(newSatFile);
+        outSat.writeObject(sat);
+        outSat.close();
     }
 
     /**
@@ -89,8 +112,8 @@ public class Database {
     public void addData(Data data) throws IOException {
         /** Checking the next sequence number */
         Satellite sat = satList.get(data.getSat());
-        FileInputStream inSatFile = new FileInputStream("data/" + sat.getName() + "/nextseqnum.bin");
-        ObjectInputStream inSeq = new ObjectInputStream(inSatFile);
+        FileInputStream inSeqFile = new FileInputStream("data/" + sat.getName() + "/nextseqnum.bin");
+        ObjectInputStream inSeq = new ObjectInputStream(inSeqFile);
         long n = inSeq.readLong();
         inSeq.close();
 

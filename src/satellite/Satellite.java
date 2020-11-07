@@ -5,8 +5,11 @@ import dtype.*;
 
 import java.util.HashMap;
 
-public class Satellite {
+import java.io.Serializable;
 
+public class Satellite implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     String name;
     String familyName;
     HashMap<String, Component> components;
