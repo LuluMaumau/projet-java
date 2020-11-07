@@ -2,6 +2,7 @@ package dtype;
 
 public class GrayImage extends Data {
 
+    private static final long serialVersionUID = 1L;
     int[][] bitmap;
     int size;
 

@@ -47,21 +47,22 @@ public class Database {
     public void makeSatellite(String name, Family f) throws IOException {
 
         Satellite sat = new Satellite(name.toUpperCase(), f);
-
         File newFile = new File("data/" + sat.getName());
-        boolean madeNewFile = newFile.mkdir();
-        if (madeNewFile) {
+        if (!newFile.exists()) {
+            boolean madeNewFile = newFile.mkdirs();
+            if (!madeNewFile) {
 
-            satList.put(sat.getName(), sat);
-
-            System.out.println("data/" + sat.getName() + "/nextseqnum.bin");
-            FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getName() + "/nextseqnum.bin");
-            ObjectOutputStream out = new ObjectOutputStream(newSatFile);
-            out.writeLong(000000000);
-            out.close();
+            }
         } else {
-            System.out.println("The new satellite file couldn't be created");
+            System.out.println("Similar satellite with the same name already exists");
+            satList.put(sat.getName(), sat);
         }
+
+        System.out.println("data/" + sat.getName() + "/nextseqnum.bin");
+        FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getName() + "/nextseqnum.bin");
+        ObjectOutputStream out = new ObjectOutputStream(newSatFile);
+        out.writeLong(000000000);
+        out.close();
     }
 
     /**
@@ -87,17 +88,23 @@ public class Database {
         /** Checking the next sequence number */
         Satellite sat = satList.get(data.getSat());
         FileInputStream inSatFile = new FileInputStream("data/" + sat.getName() + "/nextseqnum.bin");
-        ObjectInputStream in = new ObjectInputStream(inSatFile);
-        long n = in.readLong();
-        in.close();
+        ObjectInputStream inSeq = new ObjectInputStream(inSatFile);
+        long n = inSeq.readLong();
+        inSeq.close();
 
         if (n == 99999999) {
             System.out.println("Data folder for " + sat.getName() + " is full.");
         } else {
+            /** Writing the data */
             FileOutputStream newDataFile = new FileOutputStream("data/" + sat.getName() + "/" + n + ".bin");
-            ObjectOutputStream out = new ObjectOutputStream(newDataFile);
-            out.writeObject(data);
-            out.close();
+            ObjectOutputStream outData = new ObjectOutputStream(newDataFile);
+            outData.writeObject(data);
+            outData.close();
+            /** Modifying the next sequence number */
+            FileOutputStream nextSeqFile = new FileOutputStream("data/" + sat.getName() + "/nextseqnum.bin");
+            ObjectOutputStream outSeq = new ObjectOutputStream(nextSeqFile);
+            outSeq.writeLong(n + 1);
+            outSeq.close();
         }
     }
 
