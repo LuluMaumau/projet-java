@@ -1,17 +1,19 @@
 package satellite.subsystems;
 
-import data.*;
+import dtype.*;
 
 import java.util.ArrayList;
 
 public abstract class Component {
 
     String name;
+    String satName;
     boolean active;
     ArrayList<String> commands;
 
-    public Component(String name, ArrayList<String> commands) {
+    public Component(String name, String satName, ArrayList<String> commands) {
         this.name = name.toUpperCase();
+        this.satName = satName;
         this.active = true;
         for (String string : commands) {
             string.toUpperCase();
@@ -74,10 +76,6 @@ public abstract class Component {
     }
 
     /**
-     * @param getName(
-     * @return Data
-     */
-    /**
      * A method to recover data from this component. Type will vary to match the
      * type of recoveredData
      * 
@@ -105,6 +103,15 @@ public abstract class Component {
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     * Get the name of the Component
+     * 
+     * @return The name attribute
+     */
+    public String getSatName() {
+        return this.satName;
     }
 
     /**

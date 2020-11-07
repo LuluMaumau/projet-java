@@ -1,6 +1,13 @@
+package dmanager;
+
 import satellite.subsystems.*;
 import satellite.*;
-import data.*;
+import dtype.*;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import java.util.HashMap;
 import java.util.Date;
@@ -33,10 +40,15 @@ public class Database {
      * 
      * @param name Name of the new satellite
      * @param f    Family of the new Satellite
+     * @throws FileNotFoundException
      */
-    public void makeSatellite(String name, Family f) {
+    public void makeSatellite(String name, Family f) throws IOException {
         Satellite sat = new Satellite(name.toUpperCase(), f);
         satList.put(sat.getFullname(), sat);
+        FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getFullname() + "/nextseqnum.txt");
+        ObjectOutputStream out = new ObjectOutputStream(newSatFile);
+        out.writeLong(000000000);
+        out.close();
     }
 
     /**
@@ -56,9 +68,14 @@ public class Database {
      * Adds Data to the HashMap listing the data indexed by their time aquisition
      * 
      * @param data The data to archive
+     * @throws IOException
      */
-    public void addData(Data data) {
-        dataHashMap.put(data.getDate(), data);
+    public void addData(Data data) throws IOException {
+        Satellite sat = satList.get(data.getSat());
+        FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getFullname() + "/nextseqnum.txt");
+        ObjectOutputStream out = new ObjectOutputStream(newSatFile);
+        out.writeLong(000000000);
+        out.close();
     }
 
     /**

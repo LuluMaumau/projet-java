@@ -1,7 +1,7 @@
 package satellite;
 
 import satellite.subsystems.*;
-import data.*;
+import dtype.*;
 
 import java.util.HashMap;
 

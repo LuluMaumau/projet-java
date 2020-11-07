@@ -1,5 +1,7 @@
-import data.*;
+import dtype.*;
+import dmanager.*;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Control {
@@ -35,13 +37,38 @@ public class Control {
     }
 
     /**
+     * Enter the command line, type "quit" to exit
+     * 
+     * @param BDD
+     * @throws IOException
+     */
+    public static void execute(Database BDD) throws IOException {
+
+        /** Printing the Database elements */
+        System.out.println(BDD);
+
+        /** Entry command line */
+        Scanner sc = new Scanner(System.in);
+        String s = "";
+        while (!s.equals("quit")) {
+            s = sc.next();
+            Control.run(BDD, s);
+        }
+        sc.close();
+
+        /** Printing the final databse */
+        System.out.println(BDD);
+    }
+
+    /**
      * Checking if the entry is acceptable, ie if it is well formatted (exactly 2
      * times ) without sending back errors, running it if so.
      * 
      * @param BDD Database to use and potentially update
      * @param s   Entry line
+     * @throws IOException
      */
-    public static void run(Database BDD, String s) {
+    public static void run(Database BDD, String s) throws IOException {
         if (!s.contains(":")) {
             System.out.println("Wrong format of input");
         } else if (!(s.substring(s.indexOf(':') + 1, s.length())).contains(":")) {
@@ -58,8 +85,9 @@ public class Control {
      * it
      * 
      * @param s The prompted input
+     * @throws IOException
      */
-    public static void operation(Database BDD, String s) {
+    public static void operation(Database BDD, String s) throws IOException {
         String command = getCommand(s).trim().toUpperCase();
         String component = getComponent(s).trim().toUpperCase();
         String satellite = getSatellite(s).trim().toUpperCase();
@@ -93,8 +121,9 @@ public class Control {
      * 
      * @param satellite Satellite to send the requested telemesure to
      * @param component Components to send the requested telemesure to
+     * @throws IOException
      */
-    public static void sendTM(Database BDD, String satellite, String component) {
+    public static void sendTM(Database BDD, String satellite, String component) throws IOException {
         ReturnedData answer = BDD.getSatellite(satellite).executeTM(component);
         if (answer.isSuccess()) {
             Control.archive(BDD, answer.getRecoveredData());
@@ -120,31 +149,10 @@ public class Control {
      * 
      * @param BDD  The database
      * @param data The data to add
+     * @throws IOException
      */
-    public static void archive(Database BDD, Data data) {
+    public static void archive(Database BDD, Data data) throws IOException {
         BDD.addData(data);
     }
 
-    /**
-     * Enter the command line, type "quit" to exit
-     * 
-     * @param BDD
-     */
-    public static void execute(Database BDD) {
-
-        /** Printing the Database elements */
-        System.out.println(BDD);
-
-        /** Entry command line */
-        Scanner sc = new Scanner(System.in);
-        String s = "";
-        while (!s.equals("quit")) {
-            s = sc.next();
-            Control.run(BDD, s);
-        }
-        sc.close();
-
-        /** Printing the final databse */
-        System.out.println(BDD);
-    }
 }
