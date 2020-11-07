@@ -55,8 +55,10 @@ public class Database {
             }
         } else {
             System.out.println("Similar satellite with the same name already exists");
-            satList.put(sat.getName(), sat);
         }
+
+        /** This is only here for tests, will change place soon */
+        satList.put(sat.getName(), sat);
 
         System.out.println("data/" + sat.getName() + "/nextseqnum.bin");
         FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getName() + "/nextseqnum.bin");
