@@ -10,7 +10,6 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Date;
-import java.util.Scanner;
 
 public class DataSearcher {
 
@@ -18,6 +17,10 @@ public class DataSearcher {
     HashMap<Object, ArrayList<Object>> satIndex;
     HashMap<Object, ArrayList<Object>> posIndex;
     HashMap<Object, ArrayList<Object>> compIndex;
+    Date date;
+    String sat;
+    Position pos;
+    String comp;
 
     public DataSearcher() throws IOException, ClassNotFoundException {
 
@@ -52,6 +55,7 @@ public class DataSearcher {
             }
 
         }
+
     }
 
     private void addValue(HashMap<Object, ArrayList<Object>> hashMap, Object key, Object value) {
@@ -64,20 +68,20 @@ public class DataSearcher {
         }
     }
 
-    private ArrayList<Object> findDate(Date date) {
-        return dateIndex.get(date);
+    private ArrayList<Object> findDate() {
+        return dateIndex.get(this.date);
     }
 
-    private ArrayList<Object> findPosition(Position pos) {
-        return posIndex.get(pos);
+    private ArrayList<Object> findSatellite() {
+        return satIndex.get(this.sat);
     }
 
-    private ArrayList<Object> findSatellite(String sat) {
-        return satIndex.get(sat);
+    private ArrayList<Object> findPosition() {
+        return posIndex.get(this.pos);
     }
 
-    private ArrayList<Object> findSat(String comp) {
-        return compIndex.get(comp);
+    private ArrayList<Object> findSat() {
+        return compIndex.get(this.comp);
     }
 
     public void display(ArrayList<Object> toPrint) {
@@ -90,14 +94,4 @@ public class DataSearcher {
         }
     }
 
-    public static void main(String[] args) {
-
-        /** Entry command line */
-        Scanner sc = new Scanner(System.in);
-        String s = "";
-        while (!s.equals("quit")) {
-            s = sc.next();
-        }
-        sc.close();
-    }
 }
