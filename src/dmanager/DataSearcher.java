@@ -1,87 +1,32 @@
 package dmanager;
 
-import dtype.*;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Date;
 
 public class DataSearcher {
 
-    HashMap<Object, ArrayList<Object>> dateIndex;
-    HashMap<Object, ArrayList<Object>> satIndex;
-    HashMap<Object, ArrayList<Object>> posIndex;
-    HashMap<Object, ArrayList<Object>> compIndex;
-    Date date;
-    String sat;
-    Position pos;
-    String comp;
+    FlashData FD;
 
-    public DataSearcher() throws IOException, ClassNotFoundException {
+    Date start;
+    Date end;
+    ArrayList<String> satellite;
+    ArrayList<String> dtype;
 
-        dateIndex = new HashMap<Object, ArrayList<Object>>();
-        satIndex = new HashMap<Object, ArrayList<Object>>();
-        posIndex = new HashMap<Object, ArrayList<Object>>();
-        compIndex = new HashMap<Object, ArrayList<Object>>();
-
-        /** Completing the satellite list with those already existing in the database */
-        File[] satList = (new File("data")).listFiles();
-        for (File satFile : satList) {
-
-            if (satFile.isDirectory()) {
-
-                File[] dataList = satFile.listFiles();
-                for (File dataFile : dataList) {
-
-                    String dataPath = dataFile.getCanonicalPath();
-                    FileInputStream inDataFile = new FileInputStream(dataPath);
-                    ObjectInputStream inData = new ObjectInputStream(inDataFile);
-                    Data data = (Data) inData.readObject();
-
-                    addValue(dateIndex, data.getDate(), data);
-                    addValue(satIndex, data.getSat(), data);
-                    addValue(posIndex, data.getPosition(), data);
-                    addValue(compIndex, data.getComponent(), data);
-
-                    inData.close();
-
-                }
-
-            }
-
-        }
-
+    public DataSearcher(FlashData FD, Date start, Date end, ArrayList<String> satellite, ArrayList<String> dtype) {
+        this.FD = FD;
+        this.start = start;
+        this.end = end;
+        this.satellite = satellite;
+        this.dtype = dtype;
     }
 
-    private void addValue(HashMap<Object, ArrayList<Object>> hashMap, Object key, Object value) {
-        if (hashMap.containsKey(key)) {
-            hashMap.get(key).add(value);
-        } else {
-            ArrayList<Object> list = new ArrayList<>();
-            list.add(value);
-            hashMap.put(key, list);
-        }
+    public DataSearcher(boolean load) throws ClassNotFoundException, IOException {
+        this(new FlashData(load), null, null, new ArrayList<String>(), new ArrayList<String>());
     }
 
-    private ArrayList<Object> findDate() {
-        return dateIndex.get(this.date);
-    }
-
-    private ArrayList<Object> findSatellite() {
-        return satIndex.get(this.sat);
-    }
-
-    private ArrayList<Object> findPosition() {
-        return posIndex.get(this.pos);
-    }
-
-    private ArrayList<Object> findSat() {
-        return compIndex.get(this.comp);
+    public DataSearcher() throws ClassNotFoundException, IOException {
+        this(new FlashData(false), null, null, new ArrayList<String>(), new ArrayList<String>());
     }
 
     public void display(ArrayList<Object> toPrint) {
@@ -91,6 +36,40 @@ public class DataSearcher {
             for (Object object : toPrint) {
                 System.out.println(object);
             }
+        }
+    }
+
+    public void displayStart() {
+        if (start != null) {
+            System.out.println("The selected starting date for search is " + start);
+        } else {
+            System.out.println("No starting date selected, the search won't discriminate this parameter");
+        }
+    }
+
+    public void displayEnd() {
+        if (end != null) {
+            System.out.println("The selected ending date for search is " + end);
+        } else {
+            System.out.println("No ending date selected, the search won't discriminate this parameter");
+        }
+    }
+
+    public void displaySatallite() {
+        if (!satellite.isEmpty()) {
+            System.out.println("The selected satellites for the search are :");
+            System.out.println(satellite);
+        } else {
+            System.out.println("No satellite selected, the search won't discriminate this parameter");
+        }
+    }
+
+    public void displayDtype() {
+        if (!dtype.isEmpty()) {
+            System.out.println("The selected data types are :");
+            System.out.println(dtype);
+        } else {
+            System.out.println("No data type selected, the search won't discriminate this parameter");
         }
     }
 
