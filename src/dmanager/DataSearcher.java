@@ -64,8 +64,30 @@ public class DataSearcher {
         }
     }
 
-    private void findSatellite(String sat) {
+    private ArrayList<Object> findDate(Date date) {
+        return dateIndex.get(date);
+    }
 
+    private ArrayList<Object> findPosition(Position pos) {
+        return posIndex.get(pos);
+    }
+
+    private ArrayList<Object> findSatellite(String sat) {
+        return satIndex.get(sat);
+    }
+
+    private ArrayList<Object> findSat(String comp) {
+        return compIndex.get(comp);
+    }
+
+    public void display(ArrayList<Object> toPrint) {
+        if (toPrint.size() > 10) {
+            System.out.println(toPrint.size());
+        } else {
+            for (Object object : toPrint) {
+                System.out.println(object);
+            }
+        }
     }
 
     public static void main(String[] args) {
