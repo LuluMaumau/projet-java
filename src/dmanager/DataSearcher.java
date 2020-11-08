@@ -1,8 +1,12 @@
 package dmanager;
 
+import dtype.Data;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DataSearcher {
 
@@ -13,12 +17,24 @@ public class DataSearcher {
     ArrayList<String> satellite;
     ArrayList<String> dtype;
 
+    ArrayList<Data> resultStart;
+    ArrayList<Data> resultEnd;
+    ArrayList<Data> resultSat;
+    ArrayList<Data> resultDtype;
+    ArrayList<Data> result;
+
     public DataSearcher(FlashData FD, Date start, Date end, ArrayList<String> satellite, ArrayList<String> dtype) {
         this.FD = FD;
         this.start = start;
         this.end = end;
         this.satellite = satellite;
         this.dtype = dtype;
+
+        this.resultStart = new ArrayList<>();
+        this.resultEnd = new ArrayList<>();
+        this.resultSat = new ArrayList<>();
+        this.resultDtype = new ArrayList<>();
+        this.result = new ArrayList<>();
     }
 
     public DataSearcher(boolean load) throws ClassNotFoundException, IOException {
@@ -33,18 +49,45 @@ public class DataSearcher {
         FD.loadAll();
     }
 
-    public void search() {
+    public void searchStart() {
 
     }
 
-    public void display(ArrayList<Object> toPrint) {
-        if (toPrint.size() > 10) {
-            System.out.println(toPrint.size());
-        } else {
-            for (Object object : toPrint) {
-                System.out.println(object);
+    public void searchEnd() {
+
+    }
+
+    public void searchSat() {
+        resultSat.clear();
+        for (String sat : satellite) {
+            for (Object data : FD.satelliteIndex.get(sat)) {
+                resultSat.add((Data) data);
             }
         }
+    }
+
+    public void searchDtype() {
+        resultDtype.clear();
+        for (String dt : dtype) {
+            for (Object data : FD.satelliteIndex.get(dt)) {
+                resultDtype.add((Data) data);
+            }
+        }
+    }
+
+    public void search() {
+        /** Ligne à changer par la suite */
+        result = resultSat;
+    }
+
+    private ArrayList<Data> intersectData(ArrayList<Data> list1, ArrayList<Data> list2) {
+        Set<Data> set = new HashSet<>(list1);
+        for (Data data : list2) {
+            if (list1.contains(data)) {
+                set.add(data);
+            }
+        }
+        return new ArrayList<>(set);
     }
 
     public void addSatellite(String sat) {
@@ -128,7 +171,18 @@ public class DataSearcher {
         displayDtype();
     }
 
-    public void printResults() {
-
+    public void printResult() {
+        System.out.println("coucou");
+        System.out.println(result);
+        if (result.size() > 10) {
+            System.out.println(1);
+            System.out.println(result.size());
+        } else {
+            System.out.println(2);
+            for (Data data : result) {
+                System.out.println(3);
+                System.out.println(data);
+            }
+        }
     }
 }

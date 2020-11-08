@@ -36,16 +36,20 @@ public class FlashData {
                 File[] dataList = satFile.listFiles();
                 for (File dataFile : dataList) {
 
-                    String dataPath = dataFile.getCanonicalPath();
-                    FileInputStream inDataFile = new FileInputStream(dataPath);
-                    ObjectInputStream inData = new ObjectInputStream(inDataFile);
-                    Data data = (Data) inData.readObject();
+                    if (!dataFile.getName().equals("sat.bin") && !dataFile.getName().equals("nextseqnum.bin")) {
 
-                    addValue(dateIndex, data.getDate(), data);
-                    addValue(satelliteIndex, data.getSat(), data);
-                    addValue(dtypeIndex, data.getComponent(), data);
+                        String dataPath = dataFile.getCanonicalPath();
+                        System.out.println(dataPath);
+                        FileInputStream inDataFile = new FileInputStream(dataPath);
+                        ObjectInputStream inData = new ObjectInputStream(inDataFile);
+                        Data data = (Data) inData.readObject();
 
-                    inData.close();
+                        addValue(dateIndex, data.getDate(), data);
+                        addValue(satelliteIndex, data.getSat(), data);
+                        addValue(dtypeIndex, data.getComponent(), data);
+
+                        inData.close();
+                    }
 
                 }
             }

@@ -14,7 +14,7 @@ public class DataSearcherMain {
         String s = "";
         while (!s.equals("quit")) {
             s = sc.next();
-            switch (s) {
+            switch (s.trim().toLowerCase()) {
                 case "print":
                     DS.displayAll();
                     break;
@@ -30,12 +30,21 @@ public class DataSearcherMain {
                 case "print dtype":
                     DS.displayDtype();
                     break;
+                case "add":
+                    System.out.println("Which satellite to add ?");
+                    s = sc.next();
+                    System.out.println(s);
+                    DS.addSatellite(s);
+                    break;
                 case "search":
                     DS.search();
-                    DS.printResults();
+                    DS.printResult();
                     break;
                 case "load":
                     DS.load();
+                    break;
+                case "print result":
+                    DS.printResult();
                     break;
                 default:
                     System.out.println("Command not recognized");

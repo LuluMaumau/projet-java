@@ -19,7 +19,7 @@ public class Main {
         Components.put(Imager.getName(), Imager);
 
         BDD.makeFamily("FAM", Components);
-        BDD.makeSatellite("LULU", BDD.getFamily("FAM"));
+        BDD.makeSatellite("PAULO", BDD.getFamily("FAM"));
 
         Control.execute(BDD);
 
