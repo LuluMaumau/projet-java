@@ -2,10 +2,13 @@ package satellite.subsystems;
 
 import dtype.*;
 
+import java.io.Serializable;
+
 import java.util.ArrayList;
 
-public abstract class Component {
+public abstract class Component implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     String name;
     boolean active;
     ArrayList<String> commands;

@@ -12,13 +12,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Date;
 
 public class Database {
 
     HashMap<String, Satellite> satList;
     HashMap<String, Family> famList;
-    HashMap<Date, Data> dataHashMap;
 
     /**
      * Initialization of the database, we will later implement an external Dataset
@@ -38,9 +36,10 @@ public class Database {
         satList = new HashMap<String, Satellite>();
         famList = new HashMap<String, Family>();
 
-        /** Completing those with existing data in the database */
-        File[] FileList = (new File("data/")).listFiles();
-        for (File file : FileList) {
+        /** Completing the satellite list with those already existing in the database */
+        File[] fileList = (new File("data")).listFiles();
+
+        for (File file : fileList) {
             if (file.isDirectory()) {
                 String filePath = file.getCanonicalPath();
                 FileInputStream inSatFile = new FileInputStream(filePath + "/sat.bin");
@@ -64,30 +63,36 @@ public class Database {
 
         Satellite sat = new Satellite(name.toUpperCase(), f);
         File newFile = new File("data/" + sat.getName());
+
         if (!newFile.exists()) {
             boolean madeNewFile = newFile.mkdirs();
+
             if (!madeNewFile) {
                 throw new Error(
-                        "This satellite doesn't exist but couldn't make a new folder to store its informations");
+                        "This satellite doesn't exist but the program couldn't make a new folder to store its informations");
+            } else {
+                /** Making the nextseqnum file */
+                FileOutputStream newSeqFile = new FileOutputStream("data/" + sat.getName() + "/nextseqnum.bin");
+                ObjectOutputStream outSeq = new ObjectOutputStream(newSeqFile);
+                outSeq.writeLong(000000000);
+                outSeq.flush();
+                outSeq.close();
+
+                /** Making a file with the satelitte's informations */
+                FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getName() + "/sat.bin");
+                ObjectOutputStream outSat = new ObjectOutputStream(newSatFile);
+                outSat.writeObject(sat);
+                outSat.flush();
+                outSat.close();
+
+                /** Adding the satellite to the satellite HashMap */
+                satList.put(sat.getName(), sat);
             }
+
         } else {
-            System.out.println("Similar satellite with the same name already exists");
+            System.out.println("Satellite with the same name already exists, please change the satellite's name");
         }
 
-        /** This is only here for tests, will change place soon */
-        satList.put(sat.getName(), sat);
-
-        /** Making the nextseqnum file */
-        FileOutputStream newSeqFile = new FileOutputStream("data/" + sat.getName() + "/nextseqnum.bin");
-        ObjectOutputStream outSeq = new ObjectOutputStream(newSeqFile);
-        outSeq.writeLong(000000000);
-        outSeq.close();
-
-        /** Making a file with the satelitte's informations */
-        FileOutputStream newSatFile = new FileOutputStream("data/" + sat.getName() + "/sat.bin");
-        ObjectOutputStream outSat = new ObjectOutputStream(newSatFile);
-        outSat.writeObject(sat);
-        outSat.close();
     }
 
     /**
@@ -193,16 +198,7 @@ public class Database {
         return this.famList;
     }
 
-    /**
-     * Gets the dataHashMap attribute
-     * 
-     * @return The dataHashMap attribute
-     */
-    public HashMap<Date, Data> getDataMap() {
-        return this.dataHashMap;
-    }
-
     public String toString() {
-        return this.satList.toString() + "\n" + this.famList.toString() + "\n" + this.dataHashMap.toString() + "\n";
+        return this.satList.toString() + "\n" + this.famList.toString() + "\n";
     }
 }
