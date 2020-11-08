@@ -54,6 +54,15 @@ public class Data implements Serializable {
     }
 
     /**
+     * Get the position of the measure
+     * 
+     * @return The position attribute
+     */
+    public Position getPosition() {
+        return this.pos;
+    }
+
+    /**
      * Get the satellite which did the measure
      * 
      * @return The sat attribute
