@@ -76,8 +76,7 @@ public class DataSearcher {
     }
 
     public void search() {
-        /** Ligne à changer par la suite */
-        result = resultSat;
+        result = intersectData(resultStart, intersectData(resultEnd, intersectData(resultSat, resultDtype)));
     }
 
     private ArrayList<Data> intersectData(ArrayList<Data> list1, ArrayList<Data> list2) {
