@@ -13,16 +13,14 @@ import java.util.HashMap;
 public class FlashData {
 
     HashMap<Object, ArrayList<Object>> dateIndex;
-    HashMap<Object, ArrayList<Object>> satIndex;
-    HashMap<Object, ArrayList<Object>> posIndex;
-    HashMap<Object, ArrayList<Object>> compIndex;
+    HashMap<Object, ArrayList<Object>> satelliteIndex;
+    HashMap<Object, ArrayList<Object>> dtypeIndex;
 
     public FlashData(boolean load) throws IOException, ClassNotFoundException {
 
         dateIndex = new HashMap<Object, ArrayList<Object>>();
-        satIndex = new HashMap<Object, ArrayList<Object>>();
-        posIndex = new HashMap<Object, ArrayList<Object>>();
-        compIndex = new HashMap<Object, ArrayList<Object>>();
+        satelliteIndex = new HashMap<Object, ArrayList<Object>>();
+        dtypeIndex = new HashMap<Object, ArrayList<Object>>();
 
         /** Completing the satellite list with those already existing in the database */
         if (load) {
@@ -35,7 +33,6 @@ public class FlashData {
         for (File satFile : satList) {
 
             if (satFile.isDirectory()) {
-
                 File[] dataList = satFile.listFiles();
                 for (File dataFile : dataList) {
 
@@ -45,14 +42,12 @@ public class FlashData {
                     Data data = (Data) inData.readObject();
 
                     addValue(dateIndex, data.getDate(), data);
-                    addValue(satIndex, data.getSat(), data);
-                    addValue(posIndex, data.getPosition(), data);
-                    addValue(compIndex, data.getComponent(), data);
+                    addValue(satelliteIndex, data.getSat(), data);
+                    addValue(dtypeIndex, data.getComponent(), data);
 
                     inData.close();
 
                 }
-
             }
 
         }

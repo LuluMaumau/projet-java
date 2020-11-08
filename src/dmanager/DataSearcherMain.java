@@ -16,30 +16,29 @@ public class DataSearcherMain {
             s = sc.next();
             switch (s) {
                 case "print":
-
+                    DS.displayAll();
                     break;
                 case "print start":
-
+                    DS.displayStart();
                     break;
                 case "print end":
-
-                    break;
-                case "print pos":
-
+                    DS.displayEnd();
                     break;
                 case "print sat":
-
+                    DS.displaySatellite();
                     break;
-                case "print comp":
-
+                case "print dtype":
+                    DS.displayDtype();
                     break;
                 case "search":
-
+                    DS.search();
+                    DS.printResults();
                     break;
                 case "load":
-
+                    DS.load();
                     break;
                 default:
+                    System.out.println("Command not recognized");
                     break;
             }
         }

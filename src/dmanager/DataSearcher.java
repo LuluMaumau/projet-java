@@ -29,6 +29,14 @@ public class DataSearcher {
         this(new FlashData(false), null, null, new ArrayList<String>(), new ArrayList<String>());
     }
 
+    public void load() throws ClassNotFoundException, IOException {
+        FD.loadAll();
+    }
+
+    public void search() {
+
+    }
+
     public void display(ArrayList<Object> toPrint) {
         if (toPrint.size() > 10) {
             System.out.println(toPrint.size());
@@ -37,6 +45,46 @@ public class DataSearcher {
                 System.out.println(object);
             }
         }
+    }
+
+    public void addSatellite(String sat) {
+        if (FD.satelliteIndex.containsKey(sat)) {
+            satellite.add(sat);
+        } else {
+            System.out.println("The loaded data does not contain such satellite, try load.");
+        }
+    }
+
+    public void removeSatellite(String sat) {
+        if (satellite.contains(sat)) {
+            satellite.remove(sat);
+        } else {
+            System.out.println("This satellite is not a parameter of the search.");
+        }
+    }
+
+    public void clearSatellite() {
+        satellite.clear();
+    }
+
+    public void addDtype(String dt) {
+        if (FD.dtypeIndex.containsKey(dt)) {
+            dtype.add(dt);
+        } else {
+            System.out.println("The loaded data does not contain such data type, try load");
+        }
+    }
+
+    public void removeDtype(String dt) {
+        if (satellite.contains(dt)) {
+            satellite.remove(dt);
+        } else {
+            System.out.println("This data type is not a parameter of the search.");
+        }
+    }
+
+    public void clearDtype() {
+        dtype.clear();
     }
 
     public void displayStart() {
@@ -55,7 +103,7 @@ public class DataSearcher {
         }
     }
 
-    public void displaySatallite() {
+    public void displaySatellite() {
         if (!satellite.isEmpty()) {
             System.out.println("The selected satellites for the search are :");
             System.out.println(satellite);
@@ -73,4 +121,14 @@ public class DataSearcher {
         }
     }
 
+    public void displayAll() {
+        displayStart();
+        displayEnd();
+        displaySatellite();
+        displayDtype();
+    }
+
+    public void printResults() {
+
+    }
 }
