@@ -59,34 +59,51 @@ public class DataSearcher {
 
     public void searchSat() {
         resultSat.clear();
-        for (String sat : satellite) {
-            for (Object data : FD.satelliteIndex.get(sat)) {
-                resultSat.add((Data) data);
+        if (!satellite.isEmpty()) {
+            for (String sat : satellite) {
+                for (Object data : FD.satelliteIndex.get(sat)) {
+                    resultSat.add((Data) data);
+                }
             }
         }
     }
 
     public void searchDtype() {
         resultDtype.clear();
-        for (String dt : dtype) {
-            for (Object data : FD.satelliteIndex.get(dt)) {
-                resultDtype.add((Data) data);
+        if (!dtype.isEmpty()) {
+            for (String dt : dtype) {
+                for (Object data : FD.satelliteIndex.get(dt)) {
+                    resultDtype.add((Data) data);
+                }
             }
         }
     }
 
     public void search() {
-        result = intersectData(resultStart, intersectData(resultEnd, intersectData(resultSat, resultDtype)));
+        searchStart();
+        searchEnd();
+        searchSat();
+        searchDtype();
+        result = intersectData(intersectData(intersectData(resultStart, resultEnd), resultSat), resultDtype);
     }
 
     private ArrayList<Data> intersectData(ArrayList<Data> list1, ArrayList<Data> list2) {
-        Set<Data> set = new HashSet<>(list1);
-        for (Data data : list2) {
-            if (list1.contains(data)) {
-                set.add(data);
+        if (list1.isEmpty()) {
+            return list2;
+        } else {
+            if (list2.isEmpty()) {
+                return list1;
+            } else {
+                Set<Data> set = new HashSet<>(list1);
+                for (Data data : list2) {
+                    if (list1.contains(data)) {
+                        set.add(data);
+                    }
+                }
+                return new ArrayList<>(set);
             }
         }
-        return new ArrayList<>(set);
+
     }
 
     public void addSatellite(String sat) {
@@ -171,15 +188,10 @@ public class DataSearcher {
     }
 
     public void printResult() {
-        System.out.println("coucou");
-        System.out.println(result);
         if (result.size() > 10) {
-            System.out.println(1);
             System.out.println(result.size());
         } else {
-            System.out.println(2);
             for (Data data : result) {
-                System.out.println(3);
                 System.out.println(data);
             }
         }
