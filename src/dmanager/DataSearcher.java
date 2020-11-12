@@ -4,7 +4,9 @@ import dtype.Data;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,11 +52,23 @@ public class DataSearcher {
     }
 
     public void searchStart() {
-
+        resultStart.clear();
+        Collection<ArrayList<Object>> c = FD.dateIndex.tailMap(start, true).values();
+        for (ArrayList<Object> arrayList : c) {
+            for (Object data : arrayList) {
+                resultStart.add((Data) data);
+            }
+        }
     }
 
     public void searchEnd() {
-
+        resultEnd.clear();
+        Collection<ArrayList<Object>> c = FD.dateIndex.headMap(start, true).values();
+        for (ArrayList<Object> arrayList : c) {
+            for (Object data : arrayList) {
+                resultEnd.add((Data) data);
+            }
+        }
     }
 
     public void searchSat() {
@@ -94,7 +108,7 @@ public class DataSearcher {
             if (list2.isEmpty()) {
                 return list1;
             } else {
-                Set<Data> set = new HashSet<>(list1);
+                Set<Data> set = new HashSet<>();
                 for (Data data : list2) {
                     if (list1.contains(data)) {
                         set.add(data);
@@ -104,6 +118,24 @@ public class DataSearcher {
             }
         }
 
+    }
+
+    public void addStart(int year, int month, int day, int hrs, int min, int sec) {
+        GregorianCalendar GC = new GregorianCalendar(year + 1900, month, day, hrs, min, sec);
+        start = GC.getTime();
+    }
+
+    public void clearStart() {
+        start = null;
+    }
+
+    public void addEnd(int year, int month, int day, int hrs, int min, int sec) {
+        GregorianCalendar GC = new GregorianCalendar(year + 1900, month, day, hrs, min, sec);
+        end = GC.getTime();
+    }
+
+    public void clearEnd() {
+        end = null;
     }
 
     public void addSatellite(String sat) {

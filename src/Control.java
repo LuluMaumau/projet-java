@@ -51,7 +51,7 @@ public class Control {
         Scanner sc = new Scanner(System.in);
         String s = "";
         while (!s.equals("quit")) {
-            s = sc.next();
+            s = sc.nextLine();
             Control.run(BDD, s);
         }
         sc.close();

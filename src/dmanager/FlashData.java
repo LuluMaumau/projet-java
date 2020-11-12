@@ -6,19 +6,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class FlashData {
 
-    HashMap<Object, ArrayList<Object>> dateIndex;
+    TreeMap<Object, ArrayList<Object>> dateIndex;
     HashMap<Object, ArrayList<Object>> satelliteIndex;
     HashMap<Object, ArrayList<Object>> dtypeIndex;
 
     public FlashData(boolean load) throws IOException, ClassNotFoundException {
 
-        dateIndex = new HashMap<Object, ArrayList<Object>>();
+        dateIndex = new TreeMap<Object, ArrayList<Object>>();
         satelliteIndex = new HashMap<Object, ArrayList<Object>>();
         dtypeIndex = new HashMap<Object, ArrayList<Object>>();
 
@@ -57,15 +58,15 @@ public class FlashData {
         }
     }
 
-    private void addValue(HashMap<Object, ArrayList<Object>> hashMap, Object key, Object value) {
-        if (hashMap.containsKey(key)) {
-            if (!hashMap.containsValue(value)) {
-                hashMap.get(key).add(value);
+    private void addValue(AbstractMap<Object, ArrayList<Object>> map, Object key, Object value) {
+        if (map.containsKey(key)) {
+            if (!map.containsValue(value)) {
+                map.get(key).add(value);
             }
         } else {
             ArrayList<Object> list = new ArrayList<>();
             list.add(value);
-            hashMap.put(key, list);
+            map.put(key, list);
         }
     }
 

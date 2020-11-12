@@ -9,6 +9,9 @@ public class DataSearcherMain {
 
         DataSearcher DS = new DataSearcher();
 
+        int day, hrs, min, sec;
+        String sat, dtype;
+
         /** Entry command line */
         Scanner sc = new Scanner(System.in);
         String s = "";
@@ -31,9 +34,42 @@ public class DataSearcherMain {
                     DS.displayDtype();
                     break;
                 case "add":
-                    System.out.println("Which satellite to add ?");
+                    System.out.println("Which parameter of search to add ?");
                     s = sc.nextLine();
-                    DS.addSatellite(s.toUpperCase());
+                    switch (s.toLowerCase()) {
+                        case "start":
+                            System.out.println("Day ?");
+                            day = sc.nextInt();
+                            System.out.println("Hour ?");
+                            hrs = sc.nextInt();
+                            System.out.println("Minute ?");
+                            min = sc.nextInt();
+                            System.out.println("Second ?");
+                            sec = sc.nextInt();
+                            DS.addStart(2020, 11, day, hrs, min, sec);
+                            break;
+                        case "end":
+                            System.out.println("Day ?");
+                            day = sc.nextInt();
+                            System.out.println("Hour ?");
+                            hrs = sc.nextInt();
+                            System.out.println("Minute ?");
+                            min = sc.nextInt();
+                            System.out.println("Second ?");
+                            sec = sc.nextInt();
+                            DS.addEnd(2020, 11, day, hrs, min, sec);
+                            break;
+                        case "sat":
+                            System.out.println("Which satellite to add ?");
+                            sat = sc.nextLine().toUpperCase();
+                            DS.addSatellite(sat);
+                            break;
+                        case "stype":
+                            System.out.println("Which satellite to add ?");
+                            dtype = sc.nextLine().toUpperCase();
+                            DS.addSatellite(dtype);
+                            break;
+                    }
                     break;
                 case "search":
                     DS.search();
