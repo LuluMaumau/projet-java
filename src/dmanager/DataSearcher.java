@@ -42,7 +42,7 @@ public class DataSearcher {
     }
 
     public DataSearcher() throws ClassNotFoundException, IOException {
-        this(new FlashData(false), null, null, new ArrayList<String>(), new ArrayList<String>());
+        this(new FlashData(true), null, null, new ArrayList<String>(), new ArrayList<String>());
     }
 
     public void load() throws ClassNotFoundException, IOException {
@@ -130,7 +130,7 @@ public class DataSearcher {
         if (FD.dtypeIndex.containsKey(dt)) {
             dtype.add(dt);
         } else {
-            System.out.println("The loaded data does not contain such data type, try load");
+            System.out.println("The loaded data does not contain such data type, if you are sure it exists try load");
         }
     }
 
@@ -187,11 +187,11 @@ public class DataSearcher {
         displayDtype();
     }
 
-    public void printResult() {
-        if (result.size() > 10) {
+    public void printResult(ArrayList<Data> r) {
+        if (r.size() > 10) {
             System.out.println(result.size());
         } else {
-            for (Data data : result) {
+            for (Data data : r) {
                 System.out.println(data);
             }
         }

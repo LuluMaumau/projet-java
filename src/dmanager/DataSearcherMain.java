@@ -13,8 +13,8 @@ public class DataSearcherMain {
         Scanner sc = new Scanner(System.in);
         String s = "";
         while (!s.equals("quit")) {
-            s = sc.next();
-            switch (s.trim().toLowerCase()) {
+            s = sc.nextLine();
+            switch (s.toLowerCase()) {
                 case "print":
                     DS.displayAll();
                     break;
@@ -32,19 +32,34 @@ public class DataSearcherMain {
                     break;
                 case "add":
                     System.out.println("Which satellite to add ?");
-                    s = sc.next();
-                    System.out.println(s);
-                    DS.addSatellite(s);
+                    s = sc.nextLine();
+                    DS.addSatellite(s.toUpperCase());
                     break;
                 case "search":
                     DS.search();
-                    DS.printResult();
+                    DS.printResult(DS.result);
+                    break;
+                case "search start":
+                    DS.searchStart();
+                    DS.printResult(DS.resultStart);
+                    break;
+                case "search end":
+                    DS.searchEnd();
+                    DS.printResult(DS.resultEnd);
+                    break;
+                case "search sat":
+                    DS.searchSat();
+                    DS.printResult(DS.resultSat);
+                    break;
+                case "search dtype":
+                    DS.searchDtype();
+                    DS.printResult(DS.resultDtype);
                     break;
                 case "load":
                     DS.load();
                     break;
                 case "print result":
-                    DS.printResult();
+                    DS.printResult(DS.result);
                     break;
                 default:
                     System.out.println("Command not recognized");
