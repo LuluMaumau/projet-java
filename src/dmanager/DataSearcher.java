@@ -102,14 +102,17 @@ public class DataSearcher {
         searchEnd();
         searchSat();
         searchDtype();
-        result = intersectData(intersectData(intersectData(resultStart, resultEnd), resultSat), resultDtype);
+        ArrayList<Data> dateSearch = intersectData(resultStart, start != null, resultEnd, end != null);
+        ArrayList<Data> satDtypeSearch = intersectData(resultSat, !satellite.isEmpty(), resultDtype, !dtype.isEmpty());
+        result = intersectData(dateSearch, !dateSearch.isEmpty(), satDtypeSearch, !satDtypeSearch.isEmpty());
     }
 
-    private ArrayList<Data> intersectData(ArrayList<Data> list1, ArrayList<Data> list2) {
-        if (list1.isEmpty()) {
+    private ArrayList<Data> intersectData(ArrayList<Data> list1, boolean searchIn1, ArrayList<Data> list2,
+            boolean searchIn2) {
+        if (!searchIn1) {
             return list2;
         } else {
-            if (list2.isEmpty()) {
+            if (!searchIn2) {
                 return list1;
             } else {
                 Set<Data> set = new HashSet<>();
