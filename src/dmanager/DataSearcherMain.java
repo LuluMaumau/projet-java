@@ -46,7 +46,7 @@ public class DataSearcherMain {
                             min = sc.nextInt();
                             System.out.println("Second ?");
                             sec = sc.nextInt();
-                            DS.addStart(2020, 11, day, hrs, min, sec);
+                            DS.addStart(2020, 10, day, hrs, min, sec);
                             break;
                         case "end":
                             System.out.println("Day ?");
@@ -57,7 +57,7 @@ public class DataSearcherMain {
                             min = sc.nextInt();
                             System.out.println("Second ?");
                             sec = sc.nextInt();
-                            DS.addEnd(2020, 11, day, hrs, min, sec);
+                            DS.addEnd(2020, 10, day, hrs, min, sec);
                             break;
                         case "sat":
                             System.out.println("Which satellite to add ?");

@@ -53,20 +53,24 @@ public class DataSearcher {
 
     public void searchStart() {
         resultStart.clear();
-        Collection<ArrayList<Object>> c = FD.dateIndex.tailMap(start, true).values();
-        for (ArrayList<Object> arrayList : c) {
-            for (Object data : arrayList) {
-                resultStart.add((Data) data);
+        if (start != null) {
+            Collection<ArrayList<Object>> c = FD.dateIndex.tailMap(start, true).values();
+            for (ArrayList<Object> arrayList : c) {
+                for (Object data : arrayList) {
+                    resultStart.add((Data) data);
+                }
             }
         }
     }
 
     public void searchEnd() {
         resultEnd.clear();
-        Collection<ArrayList<Object>> c = FD.dateIndex.headMap(start, true).values();
-        for (ArrayList<Object> arrayList : c) {
-            for (Object data : arrayList) {
-                resultEnd.add((Data) data);
+        if (end != null) {
+            Collection<ArrayList<Object>> c = FD.dateIndex.headMap(start, true).values();
+            for (ArrayList<Object> arrayList : c) {
+                for (Object data : arrayList) {
+                    resultEnd.add((Data) data);
+                }
             }
         }
     }
@@ -109,9 +113,17 @@ public class DataSearcher {
                 return list1;
             } else {
                 Set<Data> set = new HashSet<>();
-                for (Data data : list2) {
-                    if (list1.contains(data)) {
-                        set.add(data);
+                if (list1.size() < list2.size()) {
+                    for (Data data : list1) {
+                        if (list2.contains(data)) {
+                            set.add(data);
+                        }
+                    }
+                } else {
+                    for (Data data : list2) {
+                        if (list1.contains(data)) {
+                            set.add(data);
+                        }
                     }
                 }
                 return new ArrayList<>(set);
@@ -121,7 +133,7 @@ public class DataSearcher {
     }
 
     public void addStart(int year, int month, int day, int hrs, int min, int sec) {
-        GregorianCalendar GC = new GregorianCalendar(year + 1900, month, day, hrs, min, sec);
+        GregorianCalendar GC = new GregorianCalendar(year, month, day, hrs, min, sec);
         start = GC.getTime();
     }
 
@@ -130,7 +142,7 @@ public class DataSearcher {
     }
 
     public void addEnd(int year, int month, int day, int hrs, int min, int sec) {
-        GregorianCalendar GC = new GregorianCalendar(year + 1900, month, day, hrs, min, sec);
+        GregorianCalendar GC = new GregorianCalendar(year, month, day, hrs, min, sec);
         end = GC.getTime();
     }
 
