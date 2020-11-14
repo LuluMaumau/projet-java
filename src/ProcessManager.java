@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 
 import data.ReturnedData;
 
@@ -48,7 +49,7 @@ public class ProcessManager extends Control {
         try {
             lecteurAvecBuffer = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException exc) {
-            System.out.println("Process file does not");
+            System.out.println("Process file does not exist");
         }
         try {
             while ((ligne = lecteurAvecBuffer.readLine()) != null) {
@@ -106,7 +107,12 @@ public class ProcessManager extends Control {
      * @param s the wait command line
      */
     public static void doWait(String s) {
-        int time = Integer.parseInt(s.substring(s.indexOf(" ") + 1, s.length()));
+        int time = 0;
+        try {
+            time = Integer.parseInt(s.substring(s.indexOf(" ") + 1, s.length()));
+        } catch (DateTimeParseException e) {
+            System.out.println("wrong 'wait' input");
+        }
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
@@ -135,7 +141,12 @@ public class ProcessManager extends Control {
      * @param s the AT command line
      */
     public static void doAt(String s) {
-        long time = Instant.parse(s.substring(s.indexOf(" ") + 1, s.length())).toEpochMilli();
+        long time = 0;
+        try {
+            time = Instant.parse(s.substring(s.indexOf(" ") + 1, s.length())).toEpochMilli();
+        } catch (DateTimeParseException e) {
+            System.out.println("wrong 'at' input");
+        }
         long currentTime = System.currentTimeMillis();
         if (time - currentTime > 0) {
             try {
