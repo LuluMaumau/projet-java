@@ -41,7 +41,7 @@ public class OffAction extends AbstractAction {
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.anchor = GridBagConstraints.LINE_START;
 
-        ReturnedData answer = Satellite.executeTC(this.SousSysteme.nom, "DEACTIVATE");
+        ReturnedData answer = Satellite.executeTC(this.SousSysteme.nom, "DESACTIVATE");
         if (answer.isSuccess()) {
 
             historique.add(new JLabel("<html><body><font color= green>" + this.Satellite.getName() + ":"
