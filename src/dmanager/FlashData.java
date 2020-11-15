@@ -17,7 +17,7 @@ public class FlashData {
     HashMap<Object, ArrayList<Object>> satelliteIndex;
     HashMap<Object, ArrayList<Object>> dtypeIndex;
 
-    public FlashData(boolean load) throws IOException, ClassNotFoundException {
+    public FlashData(boolean load) {
 
         dateIndex = new TreeMap<Object, ArrayList<Object>>();
         satelliteIndex = new HashMap<Object, ArrayList<Object>>();
@@ -29,7 +29,8 @@ public class FlashData {
         }
     }
 
-    public void loadAll() throws IOException, ClassNotFoundException {
+    public void loadAll() {
+        removeAll();
         File[] satList = (new File("data")).listFiles();
         for (File satFile : satList) {
 
@@ -39,17 +40,25 @@ public class FlashData {
 
                     if (!dataFile.getName().equals("sat.bin") && !dataFile.getName().equals("nextseqnum.bin")) {
 
-                        String dataPath = dataFile.getCanonicalPath();
-                        System.out.println(dataPath);
-                        FileInputStream inDataFile = new FileInputStream(dataPath);
-                        ObjectInputStream inData = new ObjectInputStream(inDataFile);
-                        Data data = (Data) inData.readObject();
-
-                        addValue(dateIndex, data.getDate(), data);
-                        addValue(satelliteIndex, data.getSat(), data);
-                        addValue(dtypeIndex, data.getComponent(), data);
-
-                        inData.close();
+                        try {
+                            String dataPath = dataFile.getCanonicalPath();
+                            System.out.println(dataPath);
+                            FileInputStream inDataFile = new FileInputStream(dataPath);
+                            ObjectInputStream inData = new ObjectInputStream(inDataFile);
+                            Data data;
+                            try {
+                                data = (Data) inData.readObject();
+                                addValue(dateIndex, data.getDate(), data);
+                                addValue(satelliteIndex, data.getSat(), data);
+                                addValue(dtypeIndex, data.getComponent(), data);
+                            } catch (ClassNotFoundException e) {
+                                System.out.println("Couldn't add " + dataPath
+                                        + " to the FlashData, it won't be looked when searching");
+                            }
+                            inData.close();
+                        } catch (IOException ioe) {
+                            System.out.print(ioe.getMessage());
+                        }
                     }
 
                 }
@@ -68,6 +77,12 @@ public class FlashData {
             list.add(value);
             map.put(key, list);
         }
+    }
+
+    public void removeAll() {
+        dateIndex.clear();
+        satelliteIndex.clear();
+        dtypeIndex.clear();
     }
 
 }
