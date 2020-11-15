@@ -1,7 +1,8 @@
-package data;
+package dtype;
 
 public class GrayImage extends Data {
 
+    private static final long serialVersionUID = 1L;
     int[][] bitmap;
     int size;
 
@@ -14,7 +15,7 @@ public class GrayImage extends Data {
      * @param n         Size of the gray image
      */
     public GrayImage(String sat, String component, int n) {
-        super(sat, component);
+        super(sat, component, "IMAGE");
         this.bitmap = new int[n][n];
         for (int[] is : bitmap) {
             for (int i : is) {

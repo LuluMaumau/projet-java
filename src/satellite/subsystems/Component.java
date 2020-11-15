@@ -1,11 +1,14 @@
 package satellite.subsystems;
 
-import data.*;
+import dtype.*;
+
+import java.io.Serializable;
 
 import java.util.ArrayList;
 
-public abstract class Component {
+public abstract class Component implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     String name;
     boolean active;
     ArrayList<String> commands;
@@ -17,7 +20,7 @@ public abstract class Component {
             string.toUpperCase();
         }
         commands.add(0, "ACTIVATE");
-        commands.add(1, "DEACTIVATE");
+        commands.add(1, "DESACTIVATE");
         this.commands = commands;
     }
 
@@ -73,10 +76,6 @@ public abstract class Component {
 
     }
 
-    /**
-     * @param getName(
-     * @return Data
-     */
     /**
      * A method to recover data from this component. Type will vary to match the
      * type of recoveredData

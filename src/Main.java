@@ -1,10 +1,12 @@
 import satellite.subsystems.*;
+import dmanager.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         /**
          * Making a satellite LULU from family FAM (fullname FAMLULU) with one Imager
@@ -18,6 +20,7 @@ public class Main {
 
         BDD.makeFamily("FAM", Components);
         BDD.makeSatellite("LULU", BDD.getFamily("FAM"));
+        BDD.makeSatellite("PAULO", BDD.getFamily("FAM"));
 
         Control.execute(BDD);
 
