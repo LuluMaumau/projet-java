@@ -18,15 +18,15 @@ public class ProcessManager extends Control {
      * the satellite execut the process and retrun the success (or not) of the last
      * line
      * 
-     * @param BDD Database to use and potentially update
+     * @param bDD Database to use and potentially update
      * @param s   Entry line
      */
-    public static void process(Database BDD, String s) {
+    public static void process(Database bDD, String s) {
         String satellite = getSatellite(s).trim().toUpperCase();
         String file = getCommand(s).trim().toUpperCase();
         boolean lastSuccess = false;
-        if (BDD.checkSatelliteExists(satellite)) {
-            lastSuccess = readFile(BDD, file, satellite);
+        if (bDD.checkSatelliteExists(satellite)) {
+            lastSuccess = readFile(bDD, file, satellite);
             Control.printResult(lastSuccess);
         } else {
             System.out.println("Satellite does not exists");

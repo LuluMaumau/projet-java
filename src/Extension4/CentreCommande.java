@@ -1,10 +1,10 @@
 package Extension4;
 
 import java.awt.*;
+import java.io.IOException;
 
 import javax.swing.*;
 
-import Control;
 //import Controle.Control;
 import dmanager.Database;
 import satellite.subsystems.*;
@@ -65,27 +65,27 @@ public class CentreCommande extends JFrame {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, IOException {
 
         Database BDD = new Database();
         HashMap<String, Component> Components = new HashMap<String, Component>();
         HashMap<String, Satellite> Satellites = new HashMap<String, Satellite>();
         ArrayList<String> commands = new ArrayList<String>();
+
         IMG Imager = new IMG("IMAGER", commands);
         Components.put(Imager.getName(), Imager);
         BDD.makeFamily("FAM", Components);
-        Satellite newSat = BDD.makeSatellite("LULU", BDD.getFamily("FAM"));
-        Satellites.put(newSat.getName(), newSat);
-        Satellite newSat2 = BDD.makeSatellite("TOTO", BDD.getFamily("FAM"));
-        Satellites.put(newSat2.getName(), newSat2);
-        String[] elements = new String[] { "Procedure1", "Procedure2", "Procedure3" };
+
+        String[] elements = new String[] { "TEST", "Procedure2", "Procedure3" };
 
         CentreCommande CC = new CentreCommande();
         GridBagConstraints c = new GridBagConstraints();
 
+        Satellites = BDD.getSatList();
+
         for (Satellite Sat : Satellites.values()) {
 
-            Onglet SatelliteOnglet = new Onglet(Sat, CC.historique, elements);
+            Onglet SatelliteOnglet = new Onglet(Sat, CC.historique, elements, BDD);
             int u = 1;
 
             for (Component comp : Sat.getComponents().values()) {
