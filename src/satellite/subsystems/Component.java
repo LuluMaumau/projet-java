@@ -63,7 +63,7 @@ public abstract class Component {
             case ("ACTIVATE"): {
                 return this.activate();
             }
-            case ("DEACTIVATE"): {
+            case ("DESACTIVATE"): {
                 return this.deactivate();
             }
             default: {
