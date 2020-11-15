@@ -5,7 +5,7 @@ import java.util.*;
 
 import javax.swing.*;
 
-import Controle.Database;
+import dmanager.Database;
 import satellite.*;
 
 public class Onglet extends JPanel {

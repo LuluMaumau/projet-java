@@ -5,9 +5,9 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import Controle.Control;
-import Controle.Database;
-import data.ReturnedData;
+import dmanager.Database;
+import dtype.ReturnedData;
+import exec.Control;
 import satellite.*;
 
 public class OnAction extends AbstractAction {
@@ -41,7 +41,7 @@ public class OnAction extends AbstractAction {
         ReturnedData answer = Satellite.executeTC(this.SousSysteme.nom, "ACTIVATE");
         if (answer.isSuccess()) {
 
-            historique.add(new JLabel("<html><body><font color= green>" + this.Satellite.getFullname() + ":"
+            historique.add(new JLabel("<html><body><font color= green>" + this.Satellite.getName() + ":"
                     + this.SousSysteme.nom + ":" + "ON </body></html>"), c);
             SousSysteme.ChangeCoulour("black");
             SousSysteme.ChangeCoulour("green");
@@ -49,7 +49,7 @@ public class OnAction extends AbstractAction {
 
         else {
 
-            historique.add(new JLabel("<html><body><font color= red>" + this.Satellite.getFullname() + ":"
+            historique.add(new JLabel("<html><body><font color= red>" + this.Satellite.getName() + ":"
                     + this.SousSysteme.nom + ":" + "ON </body></html>"), c);
             SousSysteme.ChangeCoulour("black");
             SousSysteme.ChangeCoulour("red");

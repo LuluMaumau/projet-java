@@ -1,3 +1,4 @@
+package process;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -6,7 +7,9 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 
-import data.ReturnedData;
+import dmanager.Database;
+import exec.Control;
+import dtype.ReturnedData;
 
 public class ProcessManager extends Control {
 
@@ -266,7 +269,11 @@ public class ProcessManager extends Control {
     public static boolean processSendTM(Database BDD, String satellite, String component) {
         ReturnedData answer = BDD.getSatellite(satellite).executeTM(component);
         if (answer.isSuccess()) {
-            Control.archive(BDD, answer.getRecoveredData());
+            try {
+                Control.archive(BDD, answer.getRecoveredData());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
         return answer.isSuccess();
     }

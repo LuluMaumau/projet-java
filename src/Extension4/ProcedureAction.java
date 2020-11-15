@@ -39,7 +39,7 @@ public class ProcedureAction extends AbstractAction {
         String procedure = "" + selection.getSelectedItem();
 
         JLabel result = new JLabel(
-                "<html><body><font color= green>" + this.satellite.getFullname() + ":" + procedure + " </body></html>");
+                "<html><body><font color= green>" + this.satellite.getName() + ":" + procedure + " </body></html>");
         historique.add(result, c);
         historique.updateUI();
 

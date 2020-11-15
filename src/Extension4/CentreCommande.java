@@ -4,8 +4,9 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import Control;
 //import Controle.Control;
-import Controle.Database;
+import dmanager.Database;
 import satellite.subsystems.*;
 import satellite.subsystems.Component;
 import satellite.*;
@@ -74,9 +75,9 @@ public class CentreCommande extends JFrame {
         Components.put(Imager.getName(), Imager);
         BDD.makeFamily("FAM", Components);
         Satellite newSat = BDD.makeSatellite("LULU", BDD.getFamily("FAM"));
-        Satellites.put(newSat.getFullname(), newSat);
+        Satellites.put(newSat.getName(), newSat);
         Satellite newSat2 = BDD.makeSatellite("TOTO", BDD.getFamily("FAM"));
-        Satellites.put(newSat2.getFullname(), newSat2);
+        Satellites.put(newSat2.getName(), newSat2);
         String[] elements = new String[] { "Procedure1", "Procedure2", "Procedure3" };
 
         CentreCommande CC = new CentreCommande();
@@ -94,7 +95,7 @@ public class CentreCommande extends JFrame {
 
             }
 
-            CC.BarreOnglets.add(Sat.getFullname(), SatelliteOnglet);
+            CC.BarreOnglets.add(Sat.getName(), SatelliteOnglet);
         }
 
         c.gridy = 1;
