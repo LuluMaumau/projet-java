@@ -11,18 +11,18 @@ import java.util.Set;
 
 public class DataSearcher {
 
-    FlashData FD;
+    private FlashData FD;
 
-    Date start;
-    Date end;
-    ArrayList<String> satellite;
-    ArrayList<String> dtype;
+    private Date start;
+    private Date end;
+    private ArrayList<String> satellite;
+    private ArrayList<String> dtype;
 
-    ArrayList<Data> resultStart;
-    ArrayList<Data> resultEnd;
-    ArrayList<Data> resultSat;
-    ArrayList<Data> resultDtype;
-    ArrayList<Data> result;
+    private ArrayList<Data> resultStart;
+    private ArrayList<Data> resultEnd;
+    private ArrayList<Data> resultSat;
+    private ArrayList<Data> resultDtype;
+    private ArrayList<Data> result;
 
     /**
      * Constructor of the DataSearcher with a FlashData, parameters of search and
@@ -81,7 +81,7 @@ public class DataSearcher {
     public void searchStart() {
         resultStart.clear();
         if (start != null) {
-            Collection<ArrayList<Object>> c = FD.dateIndex.tailMap(start, true).values();
+            Collection<ArrayList<Object>> c = FD.getDateIndex().tailMap(start, true).values();
             for (ArrayList<Object> arrayList : c) {
                 for (Object data : arrayList) {
                     resultStart.add((Data) data);
@@ -97,7 +97,7 @@ public class DataSearcher {
     public void searchEnd() {
         resultEnd.clear();
         if (end != null) {
-            Collection<ArrayList<Object>> c = FD.dateIndex.headMap(end, true).values();
+            Collection<ArrayList<Object>> c = FD.getDateIndex().headMap(end, true).values();
             for (ArrayList<Object> arrayList : c) {
                 for (Object data : arrayList) {
                     resultEnd.add((Data) data);
@@ -114,7 +114,7 @@ public class DataSearcher {
         resultSat.clear();
         if (!satellite.isEmpty()) {
             for (String sat : satellite) {
-                for (Object data : FD.satelliteIndex.get(sat)) {
+                for (Object data : FD.getSatelliteIndex().get(sat)) {
                     resultSat.add((Data) data);
                 }
             }
@@ -129,7 +129,7 @@ public class DataSearcher {
         resultDtype.clear();
         if (!dtype.isEmpty()) {
             for (String dt : dtype) {
-                for (Object data : FD.satelliteIndex.get(dt)) {
+                for (Object data : FD.getDtypeIndex().get(dt)) {
                     resultDtype.add((Data) data);
                 }
             }
@@ -204,11 +204,21 @@ public class DataSearcher {
     public void addStart(int year, int month, int day, int hrs, int min, int sec) {
         GregorianCalendar GC = new GregorianCalendar(year, month, day, hrs, min, sec);
         Date d = GC.getTime();
+        if (end != null && d.after(end)) {
+            System.out.println("Careful, starting time of search is set after the ending time of search");
+        }
         if (d.after(new Date())) {
             System.out.println("Specified starting point not valid, start is unchanged");
         } else {
             start = d;
         }
+    }
+
+    /**
+     * Put the start attribute to null so it won't be discriminated for search
+     */
+    public void removeStart() {
+        start = null;
     }
 
     /**
@@ -225,6 +235,9 @@ public class DataSearcher {
     public void addEnd(int year, int month, int day, int hrs, int min, int sec) {
         GregorianCalendar GC = new GregorianCalendar(year, month, day, hrs, min, sec);
         Date d = GC.getTime();
+        if (start != null && d.before(start)) {
+            System.out.println("Careful, ending time of search is set before the starting time of search");
+        }
         if (d.after(new Date())) {
             end = null;
         } else {
@@ -233,12 +246,19 @@ public class DataSearcher {
     }
 
     /**
+     * Put the end attribute to null so it won't be discriminated for search
+     */
+    public void removeEnd() {
+        end = null;
+    }
+
+    /**
      * Adds a satellite as a parameter of search
      * 
      * @param sat
      */
     public void addSatellite(String sat) {
-        if (FD.satelliteIndex.containsKey(sat)) {
+        if (FD.getSatelliteIndex().containsKey(sat)) {
             satellite.add(sat);
         } else {
             System.out.println("The loaded data does not contain such satellite, try load.");
@@ -259,12 +279,19 @@ public class DataSearcher {
     }
 
     /**
+     * Make the satellite array list of search empty
+     */
+    public void clearSatellite() {
+        satellite.clear();
+    }
+
+    /**
      * Adds a dtype as a parameter of search
      * 
      * @param dt
      */
     public void addDtype(String dt) {
-        if (FD.dtypeIndex.containsKey(dt)) {
+        if (FD.getDtypeIndex().containsKey(dt)) {
             dtype.add(dt);
         } else {
             System.out.println("The loaded data does not contain such data type, if you are sure it exists try load");
@@ -277,11 +304,18 @@ public class DataSearcher {
      * @param dt
      */
     public void removeDtype(String dt) {
-        if (satellite.contains(dt)) {
-            satellite.remove(dt);
+        if (dtype.contains(dt)) {
+            dtype.remove(dt);
         } else {
             System.out.println("This data type is not a parameter of the search.");
         }
+    }
+
+    /**
+     * Make the dtype array list of search empty
+     */
+    public void clearDtype() {
+        dtype.clear();
     }
 
     /**
@@ -291,7 +325,7 @@ public class DataSearcher {
         if (start != null) {
             System.out.println("The selected starting date for search is " + start);
         } else {
-            System.out.println("No starting date selected, the search won't discriminate this parameter");
+            System.out.println("No starting date selected");
         }
     }
 
@@ -302,7 +336,7 @@ public class DataSearcher {
         if (end != null) {
             System.out.println("The selected ending date for search is " + end);
         } else {
-            System.out.println("No ending date selected, the search won't discriminate this parameter");
+            System.out.println("No ending date selected");
         }
     }
 
@@ -314,7 +348,7 @@ public class DataSearcher {
             System.out.println("The selected satellites for the search are :");
             System.out.println(satellite);
         } else {
-            System.out.println("No satellite selected, the search won't discriminate this parameter");
+            System.out.println("No satellite selected");
         }
     }
 
@@ -326,7 +360,7 @@ public class DataSearcher {
             System.out.println("The selected data types are :");
             System.out.println(dtype);
         } else {
-            System.out.println("No data type selected, the search won't discriminate this parameter");
+            System.out.println("No data type selected");
         }
     }
 
@@ -347,11 +381,103 @@ public class DataSearcher {
      */
     public void printResult(ArrayList<Data> r) {
         if (r.size() > 10) {
-            System.out.println(result.size() + " valid results : try to have more detailed search parameters");
+            System.out.println(r.size() + " valid results : try to have more detailed search parameters");
         } else {
+            System.out.println("There are " + r.size() + " results");
             for (Data data : r) {
                 System.out.println(data);
             }
         }
     }
+
+    /**
+     * Get the FlashData attribute
+     * 
+     * @return the FD attribute
+     */
+    public FlashData getFD() {
+        return this.FD;
+    }
+
+    /**
+     * Get the start attribute
+     * 
+     * @return the start attribute
+     */
+    public Date getStart() {
+        return this.start;
+    }
+
+    /**
+     * Get the end attribute
+     * 
+     * @return the end attribute
+     */
+    public Date getEnd() {
+        return this.end;
+    }
+
+    /**
+     * Get the satellite attribute which is an array of searched satellites
+     * 
+     * @return the satellite attribute
+     */
+    public ArrayList<String> getSatellite() {
+        return this.satellite;
+    }
+
+    /**
+     * Get the dtype attribute which is an array of searched data types
+     * 
+     * @return the dtype attribute
+     */
+    public ArrayList<String> getDtype() {
+        return this.dtype;
+    }
+
+    /**
+     * Get the result for a search according only to the start attribute
+     * 
+     * @return the resultStart attribute
+     */
+    public ArrayList<Data> getResultStart() {
+        return this.resultStart;
+    }
+
+    /**
+     * Get the result for a search according only to the end attribute
+     * 
+     * @return the resultEnd attribute
+     */
+    public ArrayList<Data> getResultEnd() {
+        return this.resultEnd;
+    }
+
+    /**
+     * Get the result for a search according only to the satellite attribute
+     * 
+     * @return the resultSat attribute
+     */
+    public ArrayList<Data> getResultSat() {
+        return this.resultSat;
+    }
+
+    /**
+     * Get the result for a search according only to the dtype attribute
+     * 
+     * @return the resultDtype attribute
+     */
+    public ArrayList<Data> getResultDtype() {
+        return this.resultDtype;
+    }
+
+    /**
+     * Get the result for a search according to all the attributes
+     * 
+     * @return the result attribute
+     */
+    public ArrayList<Data> getResult() {
+        return this.result;
+    }
+
 }

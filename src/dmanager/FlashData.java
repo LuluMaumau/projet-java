@@ -11,9 +11,9 @@ import java.util.TreeMap;
 
 public class FlashData {
 
-    TreeMap<Object, ArrayList<Object>> dateIndex;
-    TreeMap<Object, ArrayList<Object>> satelliteIndex;
-    TreeMap<Object, ArrayList<Object>> dtypeIndex;
+    private TreeMap<Object, ArrayList<Object>> dateIndex;
+    private TreeMap<Object, ArrayList<Object>> satelliteIndex;
+    private TreeMap<Object, ArrayList<Object>> dtypeIndex;
 
     /**
      * Constructor of the FlashData
@@ -59,7 +59,7 @@ public class FlashData {
                                 data = (Data) inData.readObject();
                                 addValue(dateIndex, data.getDate(), data);
                                 addValue(satelliteIndex, data.getSat(), data);
-                                addValue(dtypeIndex, data.getComponent(), data);
+                                addValue(dtypeIndex, data.getDtype(), data);
                             } catch (ClassNotFoundException e) {
                                 System.out.println("Couldn't add " + dataPath
                                         + " to the FlashData, it won't be looked when searching");
@@ -98,10 +98,37 @@ public class FlashData {
     /**
      * Clears all the attributes
      */
-    public void removeAll() {
+    private void removeAll() {
         dateIndex.clear();
         satelliteIndex.clear();
         dtypeIndex.clear();
+    }
+
+    /**
+     * Get the dateIntex attribute
+     * 
+     * @return dateIndex
+     */
+    public TreeMap<Object, ArrayList<Object>> getDateIndex() {
+        return this.dateIndex;
+    }
+
+    /**
+     * Get the satelliteIntex attribute
+     * 
+     * @return satelliteIndex
+     */
+    public TreeMap<Object, ArrayList<Object>> getSatelliteIndex() {
+        return this.satelliteIndex;
+    }
+
+    /**
+     * Get the dtypeIntex attribute
+     * 
+     * @return dtypeIndex
+     */
+    public TreeMap<Object, ArrayList<Object>> getDtypeIndex() {
+        return this.dtypeIndex;
     }
 
 }

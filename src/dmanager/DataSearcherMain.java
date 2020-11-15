@@ -6,6 +6,7 @@ public class DataSearcherMain {
 
     public static void main(String[] args) {
 
+        System.out.println("Initializing...");
         DataSearcher DS = new DataSearcher();
 
         int day, hrs, min, sec;
@@ -14,26 +15,14 @@ public class DataSearcherMain {
         /** Entry command line */
         Scanner sc = new Scanner(System.in);
         String s = "";
+
+        System.out.println("Ready !");
+
         while (!s.equals("quit")) {
             s = sc.nextLine();
             switch (s.toLowerCase()) {
                 case "print":
                     DS.displayAll();
-                    break;
-                case "print start":
-                    DS.displayStart();
-                    break;
-                case "print end":
-                    DS.displayEnd();
-                    break;
-                case "print sat":
-                    DS.displaySatellite();
-                    break;
-                case "print dtype":
-                    DS.displayDtype();
-                    break;
-                case "print result":
-                    DS.printResult(DS.result);
                     break;
                 case "add":
                     System.out.println("Which parameter of search to add ?");
@@ -72,7 +61,8 @@ public class DataSearcherMain {
                             DS.addDtype(dtype);
                             break;
                         default:
-                            System.out.println("Command not recognized");
+                            System.out.println("Wrong input. Must be start, end, sat or dtype");
+                            break;
                     }
                     break;
                 case "remove":
@@ -80,17 +70,19 @@ public class DataSearcherMain {
                     s = sc.nextLine();
                     switch (s.toLowerCase()) {
                         case "start":
-                            DS.start = null;
+                            DS.removeStart();
+                            ;
                             break;
                         case "end":
-                            DS.end = null;
+                            DS.removeEnd();
+                            ;
                             break;
                         case "sat":
                             System.out.println("Which satellite ?");
                             s = sc.nextLine();
                             switch (s.toLowerCase()) {
                                 case "all":
-                                    DS.satellite.clear();
+                                    DS.clearSatellite();
                                     break;
                                 default:
                                     DS.removeSatellite(s.toUpperCase());
@@ -102,34 +94,42 @@ public class DataSearcherMain {
                             s = sc.nextLine();
                             switch (s.toLowerCase()) {
                                 case "all":
-                                    DS.dtype.clear();
+                                    DS.clearDtype();
                                     break;
                                 default:
-                                    DS.removeDtype(s);
+                                    DS.removeDtype(s.toUpperCase());
                                     break;
                             }
+                            break;
+                        default:
+                            System.out.println("Wrong input. Must be start, end, sat or dtype");
                             break;
                     }
                     break;
                 case "search":
                     DS.search();
-                    DS.printResult(DS.result);
+                    DS.displayAll();
+                    DS.printResult(DS.getResult());
                     break;
                 case "search start":
                     DS.searchStart();
-                    DS.printResult(DS.resultStart);
+                    DS.displayStart();
+                    DS.printResult(DS.getResultStart());
                     break;
                 case "search end":
                     DS.searchEnd();
-                    DS.printResult(DS.resultEnd);
+                    DS.displayEnd();
+                    DS.printResult(DS.getResultEnd());
                     break;
                 case "search sat":
                     DS.searchSat();
-                    DS.printResult(DS.resultSat);
+                    DS.displaySatellite();
+                    DS.printResult(DS.getResultSat());
                     break;
                 case "search dtype":
                     DS.searchDtype();
-                    DS.printResult(DS.resultDtype);
+                    DS.displayDtype();
+                    DS.printResult(DS.getResultDtype());
                     break;
                 case "load":
                     DS.load();

@@ -111,7 +111,6 @@ public class Control {
      */
     public static void sendTC(Database BDD, String satellite, String component, String command) {
         ReturnedData answer = BDD.getSatellite(satellite).executeTC(component, command);
-        ;
         Control.printResult(answer.isSuccess());
     }
 

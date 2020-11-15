@@ -19,8 +19,8 @@ public abstract class Component implements Serializable {
         for (String string : commands) {
             string.toUpperCase();
         }
-        commands.add(0, "ON");
-        commands.add(1, "OFF");
+        commands.add(0, "ACTIVATE");
+        commands.add(1, "DESACTIVATE");
         this.commands = commands;
     }
 
@@ -63,10 +63,10 @@ public abstract class Component implements Serializable {
     public boolean run(String command) {
 
         switch (command) {
-            case ("ON"): {
+            case ("ACTIVATE"): {
                 return this.activate();
             }
-            case ("OFF"): {
+            case ("DESACTIVATE"): {
                 return this.deactivate();
             }
             default: {

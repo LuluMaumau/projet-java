@@ -11,6 +11,7 @@ public class Data implements Serializable {
     Position pos;
     String sat;
     String component;
+    String dtype;
 
     /**
      * Makes a Data object from the name of a satellite and the component which took
@@ -19,11 +20,12 @@ public class Data implements Serializable {
      * @param sat       Name of the satellite
      * @param component Name of the component
      */
-    public Data(String sat, String component) {
+    public Data(String sat, String component, String dtype) {
         this.date = new Date();
         this.pos = new Position();
         this.sat = sat;
         this.component = component;
+        this.dtype = dtype;
     }
 
     /**
@@ -72,7 +74,7 @@ public class Data implements Serializable {
     }
 
     /**
-     * Get the componend type which did the measure
+     * Get the component type which did the measure
      * 
      * @return The component attribute
      */
@@ -80,9 +82,18 @@ public class Data implements Serializable {
         return this.component;
     }
 
+    /**
+     * Get the data type
+     * 
+     * @return The dtype attribute
+     */
+    public String getDtype() {
+        return this.dtype;
+    }
+
     public String toString() {
         return " [ Date : " + this.date.toString() + " , Position : " + this.pos.toString() + " , Satellite : "
-                + this.sat + " , Component : " + this.component;
+                + this.sat + " , Component : " + this.component + " , Data type : " + this.dtype;
     }
 
 }

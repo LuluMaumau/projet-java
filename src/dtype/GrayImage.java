@@ -15,7 +15,7 @@ public class GrayImage extends Data {
      * @param n         Size of the gray image
      */
     public GrayImage(String sat, String component, int n) {
-        super(sat, component);
+        super(sat, component, "IMAGE");
         this.bitmap = new int[n][n];
         for (int[] is : bitmap) {
             for (int i : is) {
