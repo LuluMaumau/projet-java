@@ -97,7 +97,7 @@ public class DataSearcher {
     public void searchEnd() {
         resultEnd.clear();
         if (end != null) {
-            Collection<ArrayList<Object>> c = FD.dateIndex.headMap(start, true).values();
+            Collection<ArrayList<Object>> c = FD.dateIndex.headMap(end, true).values();
             for (ArrayList<Object> arrayList : c) {
                 for (Object data : arrayList) {
                     resultEnd.add((Data) data);
@@ -148,7 +148,8 @@ public class DataSearcher {
         searchDtype();
         ArrayList<Data> dateSearch = intersectData(resultStart, start != null, resultEnd, end != null);
         ArrayList<Data> satDtypeSearch = intersectData(resultSat, !satellite.isEmpty(), resultDtype, !dtype.isEmpty());
-        result = intersectData(dateSearch, !dateSearch.isEmpty(), satDtypeSearch, !satDtypeSearch.isEmpty());
+        result = intersectData(dateSearch, (start != null || end != null), satDtypeSearch,
+                (!satellite.isEmpty() || !dtype.isEmpty()));
     }
 
     /**

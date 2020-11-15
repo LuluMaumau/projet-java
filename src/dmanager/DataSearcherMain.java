@@ -1,11 +1,10 @@
 package dmanager;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class DataSearcherMain {
 
-    public static void main(String[] args) throws ClassNotFoundException, IOException {
+    public static void main(String[] args) {
 
         DataSearcher DS = new DataSearcher();
 
@@ -32,6 +31,9 @@ public class DataSearcherMain {
                     break;
                 case "print dtype":
                     DS.displayDtype();
+                    break;
+                case "print result":
+                    DS.printResult(DS.result);
                     break;
                 case "add":
                     System.out.println("Which parameter of search to add ?");
@@ -64,10 +66,48 @@ public class DataSearcherMain {
                             sat = sc.nextLine().toUpperCase();
                             DS.addSatellite(sat);
                             break;
-                        case "stype":
-                            System.out.println("Which satellite to add ?");
+                        case "dtype":
+                            System.out.println("Which dtype to add ?");
                             dtype = sc.nextLine().toUpperCase();
-                            DS.addSatellite(dtype);
+                            DS.addDtype(dtype);
+                            break;
+                        default:
+                            System.out.println("Command not recognized");
+                    }
+                    break;
+                case "remove":
+                    System.out.println("Which parameter of search to remove ?");
+                    s = sc.nextLine();
+                    switch (s.toLowerCase()) {
+                        case "start":
+                            DS.start = null;
+                            break;
+                        case "end":
+                            DS.end = null;
+                            break;
+                        case "sat":
+                            System.out.println("Which satellite ?");
+                            s = sc.nextLine();
+                            switch (s.toLowerCase()) {
+                                case "all":
+                                    DS.satellite.clear();
+                                    break;
+                                default:
+                                    DS.removeSatellite(s.toUpperCase());
+                                    break;
+                            }
+                            break;
+                        case "dtype":
+                            System.out.println("Which data type ?");
+                            s = sc.nextLine();
+                            switch (s.toLowerCase()) {
+                                case "all":
+                                    DS.dtype.clear();
+                                    break;
+                                default:
+                                    DS.removeDtype(s);
+                                    break;
+                            }
                             break;
                     }
                     break;
@@ -93,9 +133,6 @@ public class DataSearcherMain {
                     break;
                 case "load":
                     DS.load();
-                    break;
-                case "print result":
-                    DS.printResult(DS.result);
                     break;
                 default:
                     System.out.println("Command not recognized");
