@@ -12,7 +12,7 @@ public class Control {
      * @param s The prompted command
      * @return The satellite name
      */
-    private static String getSatellite(String s) {
+    protected static String getSatellite(String s) {
         return s.substring(0, s.indexOf(':'));
     }
 
@@ -22,7 +22,7 @@ public class Control {
      * @param s The prompted command
      * @return The component name
      */
-    private static String getComponent(String s) {
+    protected static String getComponent(String s) {
         return s.substring(s.indexOf(':') + 1, s.lastIndexOf(':'));
     }
 
@@ -32,7 +32,7 @@ public class Control {
      * @param s The prompted input
      * @return The command name
      */
-    private static String getCommand(String s) {
+    protected static String getCommand(String s) {
         return s.substring(s.lastIndexOf(':') + 1, s.length());
     }
 
@@ -72,7 +72,7 @@ public class Control {
         if (!s.contains(":")) {
             System.out.println("Wrong format of input");
         } else if (!(s.substring(s.indexOf(':') + 1, s.length())).contains(":")) {
-            System.out.println("Wrong format of input");
+            ProcessManager.process(BDD, s);
         } else if ((s.substring(s.indexOf(':') + 1, s.lastIndexOf(':')).contains(":"))) {
             System.out.println("Wrong format of input");
         } else {
