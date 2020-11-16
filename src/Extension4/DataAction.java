@@ -1,13 +1,14 @@
 package Extension4;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.awt.*;
 
 import javax.swing.*;
 
-import Controle.Control;
-import Controle.Database;
-import data.ReturnedData;
+import exec.Control;
+import dmanager.Database;
+import dtype.ReturnedData;
 import satellite.*;
 
 public class DataAction extends AbstractAction {
@@ -41,8 +42,12 @@ public class DataAction extends AbstractAction {
         ReturnedData answer = Satellite.executeTM(SousSysteme.nom);
 
         if (answer.isSuccess()) {
-            Control.archive(BDD, answer.getRecoveredData());
-            historique.add(new JLabel("<html><body><font color= green>" + this.Satellite.getFullname() + ":"
+            try {
+                Control.archive(BDD, answer.getRecoveredData());
+            } catch (IOException e1) {
+                System.out.println(e1.getMessage());
+            }
+            historique.add(new JLabel("<html><body><font color= green>" + this.Satellite.getName() + ":"
                     + this.SousSysteme.nom + ":" + "DATA </body></html>"), c);
             SousSysteme.ChangeCoulour("black");
             SousSysteme.ChangeCoulour("green");
@@ -51,7 +56,7 @@ public class DataAction extends AbstractAction {
 
         else {
 
-            historique.add(new JLabel("<html><body><font color= red>" + this.Satellite.getFullname() + ":"
+            historique.add(new JLabel("<html><body><font color= red>" + this.Satellite.getName() + ":"
                     + this.SousSysteme.nom + ":" + "DATA </body></html>"), c);
             SousSysteme.ChangeCoulour("black");
             SousSysteme.ChangeCoulour("red");

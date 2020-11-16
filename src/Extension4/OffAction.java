@@ -7,9 +7,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Controle.Control;
-import Controle.Database;
-import data.ReturnedData;
+import dtype.ReturnedData;
+import exec.Control;
+import dmanager.Database;
 import satellite.*;
 
 public class OffAction extends AbstractAction {
@@ -41,10 +41,10 @@ public class OffAction extends AbstractAction {
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.anchor = GridBagConstraints.LINE_START;
 
-        ReturnedData answer = Satellite.executeTC(this.SousSysteme.nom, "DEACTIVATE");
+        ReturnedData answer = Satellite.executeTC(this.SousSysteme.nom, "DESACTIVATE");
         if (answer.isSuccess()) {
 
-            historique.add(new JLabel("<html><body><font color= green>" + this.Satellite.getFullname() + ":"
+            historique.add(new JLabel("<html><body><font color= green>" + this.Satellite.getName() + ":"
                     + this.SousSysteme.nom + ":" + "OFF </body></html>"), c);
             SousSysteme.ChangeCoulour("black");
             SousSysteme.ChangeCoulour("green");
@@ -52,7 +52,7 @@ public class OffAction extends AbstractAction {
 
         else {
 
-            historique.add(new JLabel("<html><body><font color= red>" + this.Satellite.getFullname() + ":"
+            historique.add(new JLabel("<html><body><font color= red>" + this.Satellite.getName() + ":"
                     + this.SousSysteme.nom + ":" + "OFF </body></html>"), c);
             SousSysteme.ChangeCoulour("black");
             SousSysteme.ChangeCoulour("red");

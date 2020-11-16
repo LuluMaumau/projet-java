@@ -8,10 +8,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import dmanager.Database;
+import process.ProcessManager;
 import satellite.Satellite;
 
 public class ProcedureAction extends AbstractAction {
-
+    Database BDD;
     /**
     *
     */
@@ -21,9 +23,9 @@ public class ProcedureAction extends AbstractAction {
     JPanel historique;
     Satellite satellite;
 
-    ProcedureAction(JComboBox selection, JPanel historique, Satellite sat) {
-
+    ProcedureAction(JComboBox selection, JPanel historique, Satellite sat, Database BDD) {
         super("LAUNCH PROCEDURE");
+        this.BDD = BDD;
         this.selection = selection;
         satellite = sat;
         this.historique = historique;
@@ -39,10 +41,10 @@ public class ProcedureAction extends AbstractAction {
         String procedure = "" + selection.getSelectedItem();
 
         JLabel result = new JLabel(
-                "<html><body><font color= green>" + this.satellite.getFullname() + ":" + procedure + " </body></html>");
+                "<html><body><font color= green>" + this.satellite.getName() + ":" + procedure + " </body></html>");
         historique.add(result, c);
         historique.updateUI();
-
+        ProcessManager.process(BDD, this.satellite.getName() + ":" + procedure);
     }
 
 }

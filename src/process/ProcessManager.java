@@ -1,3 +1,4 @@
+package process;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -6,7 +7,9 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 
-import data.ReturnedData;
+import dmanager.Database;
+import exec.Control;
+import dtype.ReturnedData;
 
 public class ProcessManager extends Control {
 
@@ -15,15 +18,15 @@ public class ProcessManager extends Control {
      * the satellite execut the process and retrun the success (or not) of the last
      * line
      * 
-     * @param BDD Database to use and potentially update
+     * @param bDD Database to use and potentially update
      * @param s   Entry line
      */
-    public static void process(Database BDD, String s) {
+    public static void process(Database bDD, String s) {
         String satellite = getSatellite(s).trim().toUpperCase();
         String file = getCommand(s).trim().toUpperCase();
         boolean lastSuccess = false;
-        if (BDD.checkSatelliteExists(satellite)) {
-            lastSuccess = readFile(BDD, file, satellite);
+        if (bDD.checkSatelliteExists(satellite)) {
+            lastSuccess = readFile(bDD, file, satellite);
             Control.printResult(lastSuccess);
         } else {
             System.out.println("Satellite does not exists");
@@ -266,7 +269,11 @@ public class ProcessManager extends Control {
     public static boolean processSendTM(Database BDD, String satellite, String component) {
         ReturnedData answer = BDD.getSatellite(satellite).executeTM(component);
         if (answer.isSuccess()) {
-            Control.archive(BDD, answer.getRecoveredData());
+            try {
+                Control.archive(BDD, answer.getRecoveredData());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
         return answer.isSuccess();
     }

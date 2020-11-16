@@ -5,7 +5,7 @@ import java.util.*;
 
 import javax.swing.*;
 
-import Controle.Database;
+import dmanager.Database;
 import satellite.*;
 
 public class Onglet extends JPanel {
@@ -15,12 +15,13 @@ public class Onglet extends JPanel {
      */
     private static final long serialVersionUID = 1L;
 
+    Database BDD;
     Satellite Satellite;
     GridBagConstraints gbc;
     JPanel historique;
     ArrayList<SousSystemeLabel> SousSystemes;
 
-    public Onglet(Satellite Satellite, JPanel historique, String[] elements) {
+    public Onglet(Satellite Satellite, JPanel historique, String[] elements, Database BDD) {
 
         this.Satellite = Satellite;
         this.historique = historique;
@@ -35,7 +36,7 @@ public class Onglet extends JPanel {
 
         JComboBox ChoixProcedure = new JComboBox(elements);
         this.add(ChoixProcedure);
-        JButton Procedure = new JButton(new ProcedureAction(ChoixProcedure, historique, Satellite));
+        JButton Procedure = new JButton(new ProcedureAction(ChoixProcedure, historique, Satellite, BDD));
         this.add(Procedure);
     }
 
